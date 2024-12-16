@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const videoRoutes = require('./routes/videos'); // Import video routes
+const authRoutes = require('./routes/auth');
 
 dotenv.config();
 
@@ -14,6 +15,8 @@ app.use(express.json());
 
 // Use the video routes
 app.use('/api/videos', videoRoutes);
+
+app.use('/api/auth', authRoutes);
 
 // Database connection
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
