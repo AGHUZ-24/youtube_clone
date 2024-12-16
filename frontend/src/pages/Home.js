@@ -5,16 +5,13 @@ import VideoCard from '../components/VideoCard';
 const Home = () => {
   const [videos, setVideos] = useState([]);
 
-  // Fetch mock or real video data
   useEffect(() => {
     const fetchTrendingVideos = async () => {
       try {
-        // Replace with your backend API for trending videos
         const response = await axios.get('/api/videos/trending');
         setVideos(response.data);
       } catch (error) {
-        console.error('Error fetching trending videos:', error);
-        // Fallback: Mock Data
+        console.error('Error fetching videos:', error);
         setVideos([
           {
             _id: '1',
@@ -38,7 +35,7 @@ const Home = () => {
   return (
     <div style={styles.container}>
       <h1 style={styles.title}>Trending Videos</h1>
-      <div style={styles.videoList}>
+      <div style={styles.grid}>
         {videos.map((video) => (
           <VideoCard key={video._id} video={video} />
         ))}
@@ -50,15 +47,19 @@ const Home = () => {
 const styles = {
   container: {
     padding: '20px',
-    maxWidth: '1200px',
     margin: '0 auto',
+    maxWidth: '1400px',
+    backgroundColor: '#fff', // White background
   },
   title: {
     fontSize: '24px',
-    fontWeight: 'bold',
     marginBottom: '20px',
+    color: '#FF0000', // YouTube Red
+    borderBottom: '2px solid #FF0000',
+    display: 'inline-block',
+    paddingBottom: '5px',
   },
-  videoList: {
+  grid: {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
     gap: '20px',
