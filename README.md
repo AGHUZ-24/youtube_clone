@@ -8,7 +8,7 @@ A feature-rich YouTube clone application that allows users to explore, search, a
 
 - **Home Page**: Browse a list of trending videos.
 - **Video Playback**: Watch videos with controls for play, pause, and volume.
-- **Search Functionality**: Search for videos by title or keywords.
+- **Search Functionality**: Search for videos by title or keywords. *(Planned)*
 - **User Interaction**: Like, dislike, and comment on videos.
 - **User Profiles**: Manage accounts, view playlists, and track watch history. *(Planned)*
 
@@ -18,7 +18,7 @@ A feature-rich YouTube clone application that allows users to explore, search, a
 
 - **Frontend**: React (with TypeScript for better type safety and developer experience)
 - **Backend**: Node.js (REST API) running on port 5001
-- **Database**: MongoDB *(or another planned database)*
+- **Database**: MongoDB 
 - **Hosting**: Will integrate with a hosting platform like Vercel or AWS *(Planned)*
 
 ---
