@@ -33,4 +33,27 @@ const getTrendingVideos = async (req, res) => {
     }
   };
 
-module.exports = { getVideoDetails,getTrendingVideos }; // Correct export
+  // Upload Video Controller
+const uploadVideo = async (req, res) => {
+  try {
+    const { title, description } = req.body;
+    const videoUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+
+    // Create a new video document
+    const newVideo = new Video({
+      title,
+      description,
+      videoUrl,
+      thumbnailUrl: 'https://via.placeholder.com/300', // Placeholder thumbnail
+    });
+
+    await newVideo.save();
+
+    res.status(201).json({ message: 'Video uploaded successfully', video: newVideo });
+  } catch (error) {
+    console.error('Error uploading video:', error.message);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+module.exports = { uploadVideo,getVideoDetails,getTrendingVideos }; // Correct export

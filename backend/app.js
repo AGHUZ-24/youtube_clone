@@ -17,6 +17,8 @@ app.use(express.json());
 // Routes
 app.use('/api/videos', videoRoutes);
 app.use('/api/auth', authRoutes); // Mount auth routes
+app.use('/uploads', express.static('uploads'));
+
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGO_URI)
