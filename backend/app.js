@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const videoRoutes = require('./routes/videos');
+const authRoutes = require('./routes/auth'); // Import auth routes
+
 
 dotenv.config();
 
@@ -14,6 +16,7 @@ app.use(express.json());
 
 // Routes
 app.use('/api/videos', videoRoutes);
+app.use('/api/auth', authRoutes); // Mount auth routes
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGO_URI)
