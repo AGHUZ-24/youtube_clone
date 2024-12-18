@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { login } = useContext(AuthContext); // Use login function from AuthContext
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -17,9 +19,8 @@ const Login = () => {
         password,
       });
 
-      // Store token in localStorage
-      localStorage.setItem('token', response.data.token);
-      navigate('/'); // Redirect to Home page
+      login(response.data.token); // Call login function
+      navigate('/'); // Redirect to Home Page
     } catch (err) {
       console.error('Login error:', err.response?.data?.message || err.message);
       setError(err.response?.data?.message || 'Login failed');

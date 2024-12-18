@@ -1,22 +1,23 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Navbar from './components/navbar'; // Navigation bar component
-import Home from './pages/Home'; // Home Page (Trending Videos)
-import VideoDetail from './pages/VideoDetail'; // Video Detail Page
-import Signup from './pages/Signup'; // Signup Page
-import Login from './pages/Login'; // Login Page
+import Navbar from './components/navbar';
+import Home from './pages/Home';
+import VideoDetail from './pages/VideoDetail';
+import Signup from './pages/Signup';
+import Login from './pages/Login';
+import UploadVideo from './pages/UploadVideo';
 
 const App = () => {
   return (
     <Router>
-      {/* Navbar displayed on all pages */}
       <Navbar />
       <div style={styles.appContainer}>
         <Routes>
-          <Route path="/" element={<Home />} /> {/* Home Page */}
-          <Route path="/video/:id" element={<VideoDetail />} /> {/* Video Details Page */}
-          <Route path="/signup" element={<Signup />} /> {/* Signup Page */}
-          <Route path="/login" element={<Login />} /> {/* Login Page */}
+          <Route path="/" element={<Home />} />
+          <Route path="/video/:id" element={<VideoDetail />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/upload" element={<UploadVideo />} />
         </Routes>
       </div>
     </Router>
