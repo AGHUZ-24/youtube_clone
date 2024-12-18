@@ -98,5 +98,50 @@ const getComments = async (req, res) => {
   }
 };
 
+// Like a video
+const likeVideo = async (req, res) => {
+  const { id } = req.params;
 
-module.exports = { uploadVideo,getVideoDetails,getTrendingVideos, addComment, getComments }; // Correct export
+  try {
+    const video = await Video.findByIdAndUpdate(
+      id,
+      { $inc: { likes: 1 } }, // Increment the likes by 1
+      { new: true }
+    );
+
+    if (!video) {
+      return res.status(404).json({ message: 'Video not found' });
+    }
+
+    res.status(200).json({ message: 'Video liked successfully', likes: video.likes });
+  } catch (error) {
+    console.error('Error liking video:', error.message);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+// Dislike a video
+const dislikeVideo = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const video = await Video.findByIdAndUpdate(
+      id,
+      { $inc: { likes: -1 } }, // Decrement the likes by 1
+      { new: true }
+    );
+
+    if (!video) {
+      return res.status(404).json({ message: 'Video not found' });
+    }
+
+    res.status(200).json({ message: 'Video disliked successfully', likes: video.likes });
+  } catch (error) {
+    console.error('Error disliking video:', error.message);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+
+
+module.exports = { uploadVideo,getVideoDetails,getTrendingVideos, addComment, getComments, likeVideo, dislikeVideo }; // Correct export

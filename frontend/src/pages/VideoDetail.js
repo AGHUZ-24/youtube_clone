@@ -43,6 +43,24 @@ const VideoDetail = () => {
     }
   };
 
+  const handleLike = async () => {
+    try {
+      const res = await axios.post(`http://localhost:5001/api/videos/${id}/like`);
+      setVideo({ ...video, likes: res.data.likes });
+    } catch (err) {
+      console.error('Error liking video:', err.message);
+    }
+  };
+
+  const handleDislike = async () => {
+    try {
+      const res = await axios.post(`http://localhost:5001/api/videos/${id}/dislike`);
+      setVideo({ ...video, likes: res.data.likes });
+    } catch (err) {
+      console.error('Error disliking video:', err.message);
+    }
+  };
+
   if (!video) return <div>Loading...</div>;
 
   return (
@@ -54,6 +72,11 @@ const VideoDetail = () => {
       </video>
       <p>{video.description}</p>
       <p>Views: {video.views} | Likes: {video.likes}</p>
+
+      <div style={styles.actions}>
+        <button onClick={handleLike} style={styles.likeButton}>👍 Like</button>
+        <button onClick={handleDislike} style={styles.dislikeButton}>👎 Dislike</button>
+      </div>
 
       <div style={styles.commentSection}>
         <h3>Comments</h3>
