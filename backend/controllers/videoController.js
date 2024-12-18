@@ -1,16 +1,18 @@
 const mongoose = require('mongoose');
 const Video = require('../models/Video');
 
-// Controller to fetch video details
+// Fetch video details and increment views
 const getVideoDetails = async (req, res) => {
   const { id } = req.params;
 
   try {
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({ message: 'Invalid video ID format' });
-    }
+    // Find the video by ID and increment the views field
+    const video = await Video.findByIdAndUpdate(
+      id,
+      { $inc: { views: 1 } }, // Increment the views by 1
+      { new: true } // Return the updated document
+    );
 
-    const video = await Video.findById(id);
     if (!video) {
       return res.status(404).json({ message: 'Video not found' });
     }
