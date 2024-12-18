@@ -1,6 +1,6 @@
 const express = require('express');
 const multer = require('multer');
-const { getTrendingVideos, uploadVideo, getVideoDetails } = require('../controllers/videoController');
+const { addComment, getComments, getTrendingVideos, uploadVideo, getVideoDetails } = require('../controllers/videoController');
 
 const router = express.Router();
 
@@ -20,5 +20,7 @@ const upload = multer({ storage });
 router.post('/upload', upload.single('video'), uploadVideo);
 router.get('/trending', getTrendingVideos); // Route for trending videos
 router.get('/:id', getVideoDetails); // Video details route
+router.post('/:id/comments', addComment); // Add a comment to a video
+router.get('/:id/comments', getComments); // Fetch comments for a video
 
 module.exports = router;

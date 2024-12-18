@@ -55,5 +55,46 @@ const uploadVideo = async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 };
+// Add a comment to a video
+const addComment = async (req, res) => {
+  const { username, text } = req.body;
+  const { id } = req.params;
 
-module.exports = { uploadVideo,getVideoDetails,getTrendingVideos }; // Correct export
+  try {
+    const video = await Video.findById(id);
+
+    if (!video) {
+      return res.status(404).json({ message: 'Video not found' });
+    }
+
+    const newComment = { username, text };
+    video.comments.push(newComment);
+
+    await video.save();
+    res.status(201).json({ message: 'Comment added successfully', comment: newComment });
+  } catch (error) {
+    console.error('Error adding comment:', error.message);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+// Fetch comments for a video
+const getComments = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const video = await Video.findById(id);
+
+    if (!video) {
+      return res.status(404).json({ message: 'Video not found' });
+    }
+
+    res.status(200).json(video.comments);
+  } catch (error) {
+    console.error('Error fetching comments:', error.message);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+
+module.exports = { uploadVideo,getVideoDetails,getTrendingVideos, addComment, getComments }; // Correct export
