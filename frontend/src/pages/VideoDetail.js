@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { AuthContext } from '../context/AuthContext';
 
 const VideoDetail = () => {
   const { id } = useParams();
+  const { user } = useContext(AuthContext); // Get logged-in user from context
   const [video, setVideo] = useState(null);
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
@@ -45,17 +47,17 @@ const VideoDetail = () => {
 
   const handleLike = async () => {
     try {
-      const res = await axios.post(`http://localhost:5001/api/videos/${id}/like`);
-      setVideo({ ...video, likes: res.data.likes });
+      const res = await axios.post(`http://localhost:5001/api/videos/${id}/like`, { userId: user._id });
+      setVideo({ ...video, likes: res.data.likes, dislikes: res.data.dislikes });
     } catch (err) {
       console.error('Error liking video:', err.message);
     }
   };
-
+  
   const handleDislike = async () => {
     try {
-      const res = await axios.post(`http://localhost:5001/api/videos/${id}/dislike`);
-      setVideo({ ...video, likes: res.data.likes });
+      const res = await axios.post(`http://localhost:5001/api/videos/${id}/dislike`, { userId: user._id });
+      setVideo({ ...video, likes: res.data.likes, dislikes: res.data.dislikes });
     } catch (err) {
       console.error('Error disliking video:', err.message);
     }

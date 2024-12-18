@@ -101,19 +101,36 @@ const getComments = async (req, res) => {
 // Like a video
 const likeVideo = async (req, res) => {
   const { id } = req.params;
+  const { userId } = req.body;
 
   try {
-    const video = await Video.findByIdAndUpdate(
-      id,
-      { $inc: { likes: 1 } }, // Increment the likes by 1
-      { new: true }
-    );
+    const video = await Video.findById(id);
 
     if (!video) {
       return res.status(404).json({ message: 'Video not found' });
     }
 
-    res.status(200).json({ message: 'Video liked successfully', likes: video.likes });
+    // Ensure likedBy and dislikedBy arrays exist
+    video.likedBy = video.likedBy || [];
+    video.dislikedBy = video.dislikedBy || [];
+
+    // If user already liked, remove like
+    if (video.likedBy.includes(userId)) {
+      video.likes -= 1;
+      video.likedBy = video.likedBy.filter((uid) => uid.toString() !== userId);
+    } else {
+      // Add like and remove dislike if exists
+      video.likes += 1;
+      video.likedBy.push(userId);
+
+      if (video.dislikedBy.includes(userId)) {
+        video.dislikes -= 1;
+        video.dislikedBy = video.dislikedBy.filter((uid) => uid.toString() !== userId);
+      }
+    }
+
+    await video.save();
+    res.status(200).json({ likes: video.likes, dislikes: video.dislikes });
   } catch (error) {
     console.error('Error liking video:', error.message);
     res.status(500).json({ message: 'Internal server error' });
@@ -123,19 +140,36 @@ const likeVideo = async (req, res) => {
 // Dislike a video
 const dislikeVideo = async (req, res) => {
   const { id } = req.params;
+  const { userId } = req.body;
 
   try {
-    const video = await Video.findByIdAndUpdate(
-      id,
-      { $inc: { likes: -1 } }, // Decrement the likes by 1
-      { new: true }
-    );
+    const video = await Video.findById(id);
 
     if (!video) {
       return res.status(404).json({ message: 'Video not found' });
     }
 
-    res.status(200).json({ message: 'Video disliked successfully', likes: video.likes });
+    // Ensure likedBy and dislikedBy arrays exist
+    video.likedBy = video.likedBy || [];
+    video.dislikedBy = video.dislikedBy || [];
+
+    // If user already disliked, remove dislike
+    if (video.dislikedBy.includes(userId)) {
+      video.dislikes -= 1;
+      video.dislikedBy = video.dislikedBy.filter((uid) => uid.toString() !== userId);
+    } else {
+      // Add dislike and remove like if exists
+      video.dislikes += 1;
+      video.dislikedBy.push(userId);
+
+      if (video.likedBy.includes(userId)) {
+        video.likes -= 1;
+        video.likedBy = video.likedBy.filter((uid) => uid.toString() !== userId);
+      }
+    }
+
+    await video.save();
+    res.status(200).json({ likes: video.likes, dislikes: video.dislikes });
   } catch (error) {
     console.error('Error disliking video:', error.message);
     res.status(500).json({ message: 'Internal server error' });
