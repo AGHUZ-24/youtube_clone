@@ -1,36 +1,14 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
-  const navigate = useNavigate();
-
-  // Handle Logout
-  const handleLogout = () => {
-    localStorage.removeItem('token'); // Clear token
-    navigate('/login'); // Redirect to login page
-  };
-
-  const isAuthenticated = !!localStorage.getItem('token'); // Check if logged in
-
   return (
     <nav style={styles.navbar}>
-      <div style={styles.logo}>
-        <Link to="/" style={styles.link}>YouTube Clone</Link>
-      </div>
+      <h1 style={styles.logo}>YouTube Clone</h1>
       <div style={styles.links}>
-        <Link to="/" style={styles.link}>Home</Link>
-        {isAuthenticated ? (
-          <>
-            <Link to="/profile/me" style={styles.link}>Profile</Link>
-            <Link to="/upload" style={styles.link}>Upload</Link>
-            <button onClick={handleLogout} style={styles.button}>Logout</button>
-          </>
-        ) : (
-          <>
-            <Link to="/login" style={styles.link}>Login</Link>
-            <Link to="/signup" style={styles.link}>Signup</Link>
-          </>
-        )}
+        <Link to="/">Home</Link>
+        <Link to="/login">Login</Link>
+        <Link to="/signup">Signup</Link>
       </div>
     </nav>
   );
@@ -42,8 +20,8 @@ const styles = {
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: '10px 20px',
-    backgroundColor: '#282c34',
-    color: 'white',
+    backgroundColor: '#FF0000',
+    color: '#fff',
   },
   logo: {
     fontSize: '24px',
@@ -51,19 +29,7 @@ const styles = {
   },
   links: {
     display: 'flex',
-    gap: '15px',
-  },
-  link: {
-    textDecoration: 'none',
-    color: 'white',
-    fontSize: '18px',
-  },
-  button: {
-    backgroundColor: 'transparent',
-    border: 'none',
-    color: 'white',
-    fontSize: '18px',
-    cursor: 'pointer',
+    gap: '20px',
   },
 };
 

@@ -1,9 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors');
 const dotenv = require('dotenv');
-const videoRoutes = require('./routes/videos'); // Import video routes
-const authRoutes = require('./routes/auth');
+const cors = require('cors');
+const videoRoutes = require('./routes/videos');
 
 dotenv.config();
 
@@ -13,14 +12,17 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Use the video routes
+// Routes
 app.use('/api/videos', videoRoutes);
 
-app.use('/api/auth', authRoutes);
+// MongoDB Connection
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log('MongoDB connected'))
+  .catch((err) => console.error('MongoDB connection error:', err.message));
 
-// Database connection
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('Connected to MongoDB'))
-  .catch((err) => console.error('MongoDB connection error:', err));
+// Default route
+app.get('/', (req, res) => {
+  res.send('API is running');
+});
 
-module.exports = app;
+module.exports = app; // Properly export the app instance

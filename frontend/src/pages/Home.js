@@ -4,28 +4,18 @@ import VideoCard from '../components/VideoCard';
 
 const Home = () => {
   const [videos, setVideos] = useState([]);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const fetchTrendingVideos = async () => {
       try {
-        const response = await axios.get('/api/videos/trending');
-        setVideos(response.data);
+        // Fetch trending videos from the backend
+        const response = await axios.get('http://localhost:5001/api/videos/trending');
+        console.log('Trending Videos:', response.data); // Debugging: Log the response
+        setVideos(response.data); // Set videos in state
       } catch (error) {
-        console.error('Error fetching videos:', error);
-        setVideos([
-          {
-            _id: '1',
-            title: 'Sample Video 1',
-            description: 'This is a sample video description.',
-            thumbnailUrl: 'https://via.placeholder.com/300',
-          },
-          {
-            _id: '2',
-            title: 'Sample Video 2',
-            description: 'Another sample video description.',
-            thumbnailUrl: 'https://via.placeholder.com/300',
-          },
-        ]);
+        console.error('Error fetching trending videos:', error.message);
+        setError('Failed to load videos. Please try again.');
       }
     };
 
@@ -35,6 +25,7 @@ const Home = () => {
   return (
     <div style={styles.container}>
       <h1 style={styles.title}>Trending Videos</h1>
+      {error && <p style={styles.error}>{error}</p>}
       <div style={styles.grid}>
         {videos.map((video) => (
           <VideoCard key={video._id} video={video} />
@@ -47,22 +38,23 @@ const Home = () => {
 const styles = {
   container: {
     padding: '20px',
+    maxWidth: '1200px',
     margin: '0 auto',
-    maxWidth: '1400px',
-    backgroundColor: '#fff', // White background
   },
   title: {
     fontSize: '24px',
+    fontWeight: 'bold',
     marginBottom: '20px',
     color: '#FF0000', // YouTube Red
-    borderBottom: '2px solid #FF0000',
-    display: 'inline-block',
-    paddingBottom: '5px',
   },
   grid: {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
     gap: '20px',
+  },
+  error: {
+    color: 'red',
+    textAlign: 'center',
   },
 };
 

@@ -1,14 +1,36 @@
+const mongoose = require('mongoose');
 const Video = require('../models/Video');
 
-// Fetch trending videos
-const getTrendingVideos = async (req, res) => {
+// Controller to fetch video details
+const getVideoDetails = async (req, res) => {
+  const { id } = req.params;
+
   try {
-    const videos = await Video.find().sort({ views: -1 }).limit(10);
-    res.status(200).json(videos);
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: 'Invalid video ID format' });
+    }
+
+    const video = await Video.findById(id);
+    if (!video) {
+      return res.status(404).json({ message: 'Video not found' });
+    }
+
+    res.status(200).json(video);
   } catch (error) {
-    console.error('Error fetching trending videos:', error);
-    res.status(500).json({ error: 'Failed to fetch trending videos' });
+    console.error('Error fetching video details:', error.message);
+    res.status(500).json({ message: 'Internal server error' });
   }
 };
 
-module.exports = { getTrendingVideos }; // Ensure functions are exported correctly
+const getTrendingVideos = async (req, res) => {
+    try {
+      // Fetch all videos sorted by views descending
+      const videos = await Video.find().sort({ views: -1 });
+      res.status(200).json(videos);
+    } catch (error) {
+      console.error('Error fetching trending videos:', error.message);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  };
+
+module.exports = { getVideoDetails,getTrendingVideos }; // Correct export
